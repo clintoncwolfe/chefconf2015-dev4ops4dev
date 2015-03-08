@@ -1,0 +1,3 @@
+[submodule "widgetworld"]
+	path = widgetworld
+	url = git@github.com:nellshamrell/widgetworld.git
