@@ -51,19 +51,34 @@ You, or your automated minions, need a way in.
 
 #### Available
 
-TODO - redundancy plan, SPOF analysis, multi-AZ, multi-region, etc
+If something breaks, you need to have a plan for how the system
+absorbs the shock.  
+
+* What parts are likely to break or disappear?
+* Which parts of the design are single points of failure?  Can you make them redundant?  At a justifiable cost?
+* Determine the failure domains of your hosting provider.  These might be called Availability Zones, racks, circuits, or something else.  Which parts of your app should be contained in one FD?  Which parts should span FDs?  Search for hidden dependencies!
+* How will you test your availability solutions?  Google "simian army" for ideas.
 
 #### Deployable
 
-TODO - the machines should unfold themselves; are you always deploying
-to fresh instances or do you think incremental deploys are a good
-idea; what about stateful instances / volumes
+Getting the thing setup for the first time, and rolling out new versions, can be really complicated.  Automation can be help here.
+
+* What is your approach?  Are you shipping containers, or are you building each node using configuration mangement software like Chef?  If you are shipping containers, how are you building them?
+* Do you always create new machines and deploy to them, or do you perform "upgrades" on existing machines to roll out new code?  
+* How will you handle state - persistent business data, like the contents of databases?
+* How will you handle schema changes in databases? (no one seems to be good at this yet)
+* Does the app use "feature flags"?  How will you toggle them?
+* How will you orchestrate things like service restarts?  Adding and removing members from a load balancer?
 
 #### Diagnosable
 
-TODO - ELK, APM, and friends; when something goes wrong in prod, will
-the SMEs have visibility into the issue; sensitve data in logstreams;
-retention
+Depending on the security policy, developers may or may not be permitted direct access to production instances.  If an application outage occurs, the developers will likely be the best people to fix the issue.
+
+* How will logs from the instances be collected, retained, and made searchable?
+* HOw will sensitive data be identified and removed from logstreams?
+* Is it easy for developers to add instrumentation to the application?  Does it require a code push, or can it be done ad-hoc during an incident?
+* Is relying on an external APM SaaS vendor like NewRelic or AppDynamics acceptable?
+* Can you get the same instrumentation mechanisms in dev as in prod?  Can you turn off expensive metrics on a per-env basis?
 
 #### Monitorable
 
