@@ -82,13 +82,24 @@ Depending on the security policy, developers may or may not be permitted direct 
 
 #### Monitorable
 
-TODO - we can reduce the number of alerts if we just stop monitoring
+Tying into the one above, you'll want to keep an eye on some of the mterics you collect, and alert on them.
+
+* Are failure modes of the application known, or is this all new?
+* The metrics people think of first - CPU, disk, memory - may not even be meaningful in the cloud.  Try to model the monitoring as "what business events make us money, and how can we detect an anomaly in them?"
+* Once you have an idea for business monitoring, you can start thinking of how to build up metrics from probes into middelware: a SQL query to count revenue / hour, a RMQ check to watch for workers failing to keep up with requests, etc.
+* Did the developers make it easy or hard to expose these things?  Is there an instrumentation API?
 
 #### Promotable
 
-TODO - moving versioned code artifacts in a controlled manner between
-environments; can also address rollback, if you are a person who thinks
-that is a thing that humans can actually do
+You need to be able to clearly know which version of the code is in each environment in the path to production.  In some places, that might just be "Dev" and "Prod", but there may be many, with branching paths.
+
+* Do you need to be able to deploy any version of the application to any environment at any time?  Can any of that be relaxed to make your life easier?
+* Is there an artifact server, like CodeStation or Artifactory, available?
+* Are the developers packaging the code as a versioned OS package?  Could you?
+* Is it sensible to deploy directly from the version control system?
+* Do you have production constraints, like "prod may only pull from upstream; a prod deploy can never be initiated from an upstream env"?
+* What mechanism will do the actual deploy - Deployinator, or similar?
+* Are you expected to rollback, or roll forward?
 
 #### Recoverable
 
@@ -97,7 +108,7 @@ TODO - I accidentally the data
 #### Scalable
 
 TODO - both more of the things and less of the things.  Predict cost,
-align cost to demand, decide auto the autoscaling should be
+align cost to demand, decide how auto the autoscaling should be
 
 #### Securable
 
